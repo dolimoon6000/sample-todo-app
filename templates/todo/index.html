@@ -10,6 +10,9 @@
     li {
         list-style: none;
     }
+    li input {
+        margin-right: 10px;
+    }
     ul {
         padding: 0;
     }
@@ -17,12 +20,30 @@
         font-weight: bold;
         margin-right: 5px;
     }
+    .important i, .important {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+    }
+    .important {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    .material-icons.priority {
+        color: gray;
+    }
+    .material-icons.important {
+        color: yellow;
+    }
+
 </style>
 <form class="add-form">
   <p>
       <label for="title">Title</label>
       <input type="text" name="title" id="title">
   </p>
+    <p>Important: <input type="checkbox" name="important" /></p>
+
   <p>
       <input type="submit" value="Add">
   </p>
@@ -34,17 +55,28 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.0.0.min.js"></script>
 <script>
     $(document).ready(function(){
+
+        function getItemMarkup (item) {
+            var listMarkup = '<li><div class="cell"><input class="done" type="checkbox" ';
+            if (item['done']) {
+                listMarkup += 'checked ';
+            }
+            listMarkup += '/>';
+            listMarkup += '<span class="important"><i class="material-icons priority';
+            if (item['important']) {
+                listMarkup += ' important';
+            }
+            listMarkup += '">star_rate</i></span>';
+            listMarkup += item['title'] + '</div></li>';
+            return listMarkup;
+        }
         $.get('api/todoitem', function(data) {
             // populate the list
             var result = $('<ul class="list"></ul>');
             console.log(data);
             if (data.length) {
                 data.forEach(function(item) {
-                    var listMarkup = '<li><input class="done" type="checkbox" ';
-                    if (item['done']) {
-                        listMarkup += 'checked ';
-                    }
-                    listMarkup += '/>' + item['title'] + '</li>';
+                    var listMarkup = getItemMarkup(item);
                    result.append(listMarkup);
                 });
                 $('.todo-list').html(result);
@@ -60,7 +92,10 @@
             var title = $('#title');
             if ($.trim(title.val()) != '') {
                 $.post('api/todoitem/', { title: title.val() }, function (data) {
-                    $('.list').prepend('<li>' + title.val() + '</li>');
+                    var item = {
+                        title: title.val()
+                    };
+                    $('.list').prepend(getItemMarkup(item));
                 });
             } else {
                 alert('Title is required');
