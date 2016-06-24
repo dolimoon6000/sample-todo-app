@@ -10,7 +10,7 @@ def index(request):
     return render(request, 'todo/index.html')
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 def todo_item_list(request):
     if request.method == 'GET':
         todo_items = ToDoItem.objects.all()
@@ -22,6 +22,9 @@ def todo_item_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        ToDoItem.objects.all().delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['PATCH'])

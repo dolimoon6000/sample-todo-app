@@ -48,6 +48,7 @@
       <input type="submit" value="Add">
   </p>
 </form>
+<p><button class="clear-list">Clear List</button></p>
 <h2>To Do List</h2>
 <div class="todo-list-header"></div>
 <div class="todo-list"></div>
@@ -56,8 +57,12 @@
 <script>
     $(document).ready(function(){
 
+        function showEmptyListMessage() {
+            $('.todo-list').html('<p class="empty-list">List empty. Please add some items</p>');
+        }
+
         function getItemMarkup (item) {
-            var listMarkup = '<li><div class="cell"><input class="done" type="checkbox" ';
+            var listMarkup = '<div class="cell"><input class="done" type="checkbox" ';
             if (item['done']) {
                 listMarkup += 'checked ';
             }
@@ -68,22 +73,21 @@
                 listMarkup += ' important';
             }
             listMarkup += '">star_rate</i></span>';
-            listMarkup += item['title'] + '</div></li>';
+            listMarkup += item['title'] + '</div>';
             return listMarkup;
         }
         $.get('api/todoitem', function(data) {
             // populate the list
-            var result = $('<ul class="list"></ul>');
+            var result = $('.todo-list');
             console.log(data);
             if (data.length) {
                 data.forEach(function(item) {
                     var listMarkup = getItemMarkup(item);
                    result.append(listMarkup);
                 });
-                $('.todo-list').html(result);
                 $('.todo-list-header').html('<p><span>Done</span><span>Title</span><span>Important</span></p>')
             } else {
-                $('.todo-list').html('<p>List empty. Please add some items</p>');
+                showEmptyListMessage();
             }
         }, 'json');
 
@@ -99,7 +103,8 @@
                         important: $('#important').is(':checked')
                     },
                     function (data) {
-                        $('.list').prepend(getItemMarkup(data));
+                        $('.empty-list').remove();
+                        $('.todo-list').prepend(getItemMarkup(data));
                         $('#important').prop('checked', false);
                         $('#title').val('');
                 });
@@ -125,6 +130,18 @@
                 }
             });
         });
+
+        // clear list
+        $('.clear-list').click(function(e) {
+            $.ajax({
+                url: 'api/todoitem/',
+                type: 'DELETE',
+                success: function (data) {
+                    showEmptyListMessage();
+                }
+            })
+        });
+
     });
 </script>
 {% endblock %}
