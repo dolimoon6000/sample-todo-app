@@ -24,7 +24,7 @@ def todo_item_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def todo_item_detail(request, pk):
     try:
         todo_item = ToDoItem.objects.get(pk=pk)

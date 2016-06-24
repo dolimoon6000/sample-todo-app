@@ -20,12 +20,12 @@
         font-weight: bold;
         margin-right: 5px;
     }
-    .important i, .important {
+    .priority-button i, .priority-button {
         width: 24px;
         height: 24px;
         display: inline-block;
     }
-    .important {
+    .priority-button {
         margin-right: 10px;
         cursor: pointer;
     }
@@ -62,7 +62,8 @@
                 listMarkup += 'checked ';
             }
             listMarkup += '/>';
-            listMarkup += '<span class="important" data-id="' + item['id'] + '"><i class="material-icons priority';
+            listMarkup += '<span class="priority-button" data-important=' + item['important'] +
+                    ' data-id="' + item['id'] + '"><i class="material-icons priority';
             if (item['important']) {
                 listMarkup += ' important';
             }
@@ -105,6 +106,24 @@
             } else {
                 alert('Title is required');
             }
+        });
+
+        // setting priority
+        $(document.body).on('click', '.priority-button', function(e) {
+            e.preventDefault();
+            console.log('clicked');
+            var itemId = $(this).data('id');
+            var important = !$(this).data('important');
+            var _this = $(this);
+            $.ajax({
+                url: 'api/todoitem/' + itemId + '/',
+                data: { important: important },
+                type: 'PATCH',
+                success: function (data) {
+                    _this.data('important', important);
+                    _this.find('i').toggleClass('important');
+                }
+            });
         });
     });
 </script>
