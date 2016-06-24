@@ -33,7 +33,7 @@
         color: gray;
     }
     .material-icons.important {
-        color: yellow;
+        color: blue;
     }
 
 </style>
@@ -42,7 +42,7 @@
       <label for="title">Title</label>
       <input type="text" name="title" id="title">
   </p>
-    <p>Important: <input type="checkbox" name="important" /></p>
+    <p>Important: <input type="checkbox" name="important" id="important" /></p>
 
   <p>
       <input type="submit" value="Add">
@@ -62,7 +62,7 @@
                 listMarkup += 'checked ';
             }
             listMarkup += '/>';
-            listMarkup += '<span class="important"><i class="material-icons priority';
+            listMarkup += '<span class="important" data-id="' + item['id'] + '"><i class="material-icons priority';
             if (item['important']) {
                 listMarkup += ' important';
             }
@@ -90,12 +90,17 @@
         $('.add-form').submit(function(e) {
             e.preventDefault();
             var title = $('#title');
+
             if ($.trim(title.val()) != '') {
-                $.post('api/todoitem/', { title: title.val() }, function (data) {
-                    var item = {
-                        title: title.val()
-                    };
-                    $('.list').prepend(getItemMarkup(item));
+                $.post('api/todoitem/',
+                    {
+                        title: title.val(),
+                        important: $('#important').is(':checked')
+                    },
+                    function (data) {
+                        $('.list').prepend(getItemMarkup(data));
+                        $('#important').prop('checked', false);
+                        $('#title').val('');
                 });
             } else {
                 alert('Title is required');
