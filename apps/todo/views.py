@@ -34,7 +34,7 @@ def todo_item_detail(request, pk):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = ToDoItemSerializer(todo_item, data=request.data)
+    serializer = ToDoItemSerializer(todo_item, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
