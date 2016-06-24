@@ -62,13 +62,14 @@
         }
 
         function getItemMarkup (item) {
-            var listMarkup = '<div class="cell"><input class="done" type="checkbox" ';
+            var listMarkup = '<div class="cell" data-id="' + item['id'] +
+                    '"><input class="done" type="checkbox" ';
             if (item['done']) {
                 listMarkup += 'checked ';
             }
             listMarkup += '/>';
             listMarkup += '<span class="priority-button" data-important=' + item['important'] +
-                    ' data-id="' + item['id'] + '"><i class="material-icons priority';
+                    '><i class="material-icons priority';
             if (item['important']) {
                 listMarkup += ' important';
             }
@@ -117,7 +118,7 @@
         $(document.body).on('click', '.priority-button', function(e) {
             e.preventDefault();
             console.log('clicked');
-            var itemId = $(this).data('id');
+            var itemId = $(this).parent().data('id');
             var important = !$(this).data('important');
             var _this = $(this);
             $.ajax({
@@ -140,6 +141,19 @@
                     showEmptyListMessage();
                 }
             })
+        });
+
+
+        // checking off item
+        $(document.body).on('change', '.done', function(e) {
+            var itemId = $(this).parent().data('id');
+            var done = $(this).is(':checked');
+            $.ajax({
+                url: 'api/todoitem/' + itemId + '/',
+                data: { done: done },
+                type: 'PATCH',
+                success: function (data) {}
+            });
         });
 
     });
