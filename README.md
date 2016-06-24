@@ -9,6 +9,13 @@ The front end of the application is implemented using HTML, CSS, JavaScript and 
 
 The app uses the default SQLite database to store list items.
 
+### API
+```
+To fetch a list, make a GET request to /api/todoitem/
+To clear a list, make a DELETE request to /api/todoitem/
+To add an item, make a POST request to /api/todoitem/
+To update an item, make a PATCH request to /api/todoitem/<id>/
+```
 
 ### How to Run the App
 Change to the root folder of the app.
@@ -16,6 +23,11 @@ Change to the root folder of the app.
 The first time you run it, install Python requirements by running the command: 
 ```
 pip install -r requirements.txt
+```
+
+Next, run migrations using command: 
+```
+python manage.py migrate
 ```
 
 Start the server using the command: 
