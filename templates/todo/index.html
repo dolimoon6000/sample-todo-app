@@ -35,7 +35,6 @@
     .material-icons.important {
         color: blue;
     }
-
 </style>
 <form class="add-form">
   <p>
@@ -43,7 +42,6 @@
       <input type="text" name="title" id="title">
   </p>
     <p>Important: <input type="checkbox" name="important" id="important" /></p>
-
   <p>
       <input type="submit" value="Add">
   </p>
@@ -141,7 +139,6 @@
             })
         });
 
-
         // checking off item
         $(document.body).on('change', '.done', function(e) {
             var itemId = $(this).parent().data('id');
@@ -153,7 +150,6 @@
                 success: function (data) {}
             });
         });
-
     });
 </script>
 {% endblock %}
