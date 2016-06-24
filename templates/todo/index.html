@@ -80,7 +80,6 @@
         $.get('api/todoitem', function(data) {
             // populate the list
             var result = $('.todo-list');
-            console.log(data);
             if (data.length) {
                 data.forEach(function(item) {
                     var listMarkup = getItemMarkup(item);
@@ -117,7 +116,6 @@
         // setting priority
         $(document.body).on('click', '.priority-button', function(e) {
             e.preventDefault();
-            console.log('clicked');
             var itemId = $(this).parent().data('id');
             var important = !$(this).data('important');
             var _this = $(this);
