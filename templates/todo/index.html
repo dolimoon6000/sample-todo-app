@@ -1,4 +1,21 @@
 {% extends "base.html" %}
 {% block body %}
-    TODO index
+<h1>To Do App</h1>
+<div class="todo-list"></div>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.0.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $.get('api/todoitem', function(data) {
+            // populate the list
+            var result = $('<ul class="list"></ul>');
+            console.log(data);
+            _.each(data, function(item) {
+               result.append('<li>' + item['title'] + '</li>');
+            });
+            $('.todo-list').html(result);
+        }, 'json');
+    });
+</script>
 {% endblock %}
